@@ -1,6 +1,6 @@
-# simple game of pong, needs to be run with the simplegui library available on codeskulptor.com
+# simple game of pong
 
-import simplegui
+import simpleguitk as simplegui
 import random
 
 # initialize globals - pos and vel encode vertical info for paddles
@@ -28,6 +28,9 @@ updown_player = 0
 # initialize ball_pos and ball_vel for new bal in middle of table
 # if direction is RIGHT, the ball's velocity is upper right, else upper left
 def spawn_ball(direction):
+    """Spawn's the ball in the middle of the table, using 'RIGHT' or 'LEFT' as the argument
+    'direction' to determine which side of the table to ball is aimed at.
+    A random velocity means the ball will move at varying speeds in that direction."""
     global ball_pos, ball_vel
     ball_pos = [WIDTH / 2, HEIGHT / 2]
     ball_vel[1] = -1
@@ -39,6 +42,7 @@ def spawn_ball(direction):
 
 # define event handlers
 def new_game():
+    """Resets both paddle positions and player positions, and respawns the ball"""
     global paddle1_pos, paddle2_pos, paddle1_vel, paddle2_vel  # these are numbers
     global ws_player, updown_player  # these are ints
     ws_player, updown_player = 0, 0
@@ -47,6 +51,7 @@ def new_game():
 
 
 def draw(canvas):
+    """The main game logic."""
     global score1, score2, paddle1_pos, paddle2_pos, ball_pos, ball_vel, paddle1_vel, paddle2_vel, ws_player, updown_player, counter
 
     # draw mid line and gutters
@@ -103,6 +108,7 @@ def draw(canvas):
 
 
 def keydown(key):
+    """Sets the velocity of the player input keys"""
     global paddle1_vel, paddle2_vel
     if key == simplegui.KEY_MAP['up']:
         paddle2_vel -= 5
@@ -115,6 +121,7 @@ def keydown(key):
 
 
 def keyup(key):
+    """Halts the change in velocity of the player input keys"""
     global paddle1_vel, paddle2_vel
     if key == simplegui.KEY_MAP['up']:
         paddle2_vel = 0
@@ -126,13 +133,14 @@ def keyup(key):
         paddle1_vel = 0
 
 
-# create frame
-frame = simplegui.create_frame("Pong", WIDTH, HEIGHT)
-frame.set_draw_handler(draw)
-frame.set_keydown_handler(keydown)
-frame.set_keyup_handler(keyup)
-start_button = frame.add_button('Restart', new_game)
+def run():
+    # create frame
+    frame = simplegui.create_frame("Pong", WIDTH, HEIGHT)
+    frame.set_draw_handler(draw)
+    frame.set_keydown_handler(keydown)
+    frame.set_keyup_handler(keyup)
+    start_button = frame.add_button('Restart', new_game)
 
-# start frame
-new_game()
-frame.start()
+    # start frame
+    new_game()
+    frame.start()
